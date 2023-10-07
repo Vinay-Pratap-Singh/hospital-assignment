@@ -1,13 +1,16 @@
-import { Button, Input, Stack, TextField } from "@mui/material";
+import { Button, ButtonGroup, Stack, TextField } from "@mui/material";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 
 const App = () => {
   const {
     handleSubmit,
     register,
-
     formState: { errors, isSubmitting },
   } = useForm();
+
+  // button to handle active state
+  const [activeBtn, setActiveBtn] = useState(0);
 
   // to handle form submit
   const onSubmit = (data) => console.log(data);
@@ -15,18 +18,35 @@ const App = () => {
   return (
     <Stack direction={"row"} gap={5} p={2}>
       {/* for sidebar */}
-      <Stack gap={2} direction={"column"} width={200}>
-        <Button variant="contained" color="secondary">
+      <ButtonGroup
+        orientation="vertical"
+        aria-label="vertical outlined button group"
+        style={{
+          width: "200px",
+        }}
+      >
+        <Button
+          color="secondary"
+          variant={activeBtn === 0 ? "contained" : "outlined"}
+          onClick={() => setActiveBtn(0)}
+        >
           Add Patient
         </Button>
-        <Button variant="contained" color="secondary">
+        <Button
+          color="secondary"
+          variant={activeBtn === 1 ? "contained" : "outlined"}
+          onClick={() => setActiveBtn(1)}
+        >
           Edit Patient
         </Button>
-        <Input placeholder="Search" />
-        <Button variant="contained" color="secondary">
+        <Button
+          color="secondary"
+          variant={activeBtn === 2 ? "contained" : "outlined"}
+          onClick={() => setActiveBtn(2)}
+        >
           Select File
         </Button>
-      </Stack>
+      </ButtonGroup>
 
       {/* for form component */}
       <form
@@ -35,7 +55,7 @@ const App = () => {
           width: "100%",
           display: "flex",
           flexDirection: "column",
-          gap: "50px",
+          gap: "45px",
         }}
       >
         {/* for patient basic details */}
@@ -48,6 +68,7 @@ const App = () => {
         >
           {/* for patient id */}
           <TextField
+            size="small"
             id="outlined-basic"
             label="Patient ID"
             variant="outlined"
@@ -61,6 +82,7 @@ const App = () => {
             helperText={
               errors?.patientName ? errors?.patientName?.message : null
             }
+            size="small"
             id="outlined-basic"
             label="Patient Name (First and Last)"
             variant="outlined"
@@ -78,6 +100,7 @@ const App = () => {
           <TextField
             error={errors?.location ? true : false}
             helperText={errors?.location ? errors?.location?.message : null}
+            size="small"
             id="outlined-basic"
             label="Location"
             variant="outlined"
@@ -95,6 +118,7 @@ const App = () => {
           <TextField
             error={errors?.age ? true : false}
             helperText={errors?.age ? errors?.age?.message : null}
+            size="small"
             type="number"
             id="outlined-basic"
             label="Age"
@@ -112,6 +136,7 @@ const App = () => {
           <TextField
             error={errors?.phone ? true : false}
             helperText={errors?.phone ? errors?.phone?.message : null}
+            size="small"
             type="number"
             id="outlined-basic"
             label="Phone Number"
@@ -133,6 +158,7 @@ const App = () => {
           <TextField
             error={errors?.address ? true : false}
             helperText={errors?.address ? errors?.address?.message : null}
+            size="small"
             id="outlined-basic"
             label="Address"
             variant="outlined"
@@ -151,7 +177,7 @@ const App = () => {
         </Stack>
 
         {/* divider */}
-        <div style={{ height: "5px", backgroundColor: "gray" }} />
+        <div style={{ height: "2px", backgroundColor: "gray" }} />
 
         {/* for prescription details */}
         <Stack
@@ -167,6 +193,7 @@ const App = () => {
             helperText={
               errors?.prescription ? errors?.prescription?.message : null
             }
+            size="small"
             id="outlined-basic"
             label="Prescription"
             variant="outlined"
@@ -187,6 +214,7 @@ const App = () => {
           <TextField
             error={errors?.dose ? true : false}
             helperText={errors?.dose ? errors?.dose?.message : null}
+            size="small"
             id="outlined-basic"
             label="Dose"
             variant="outlined"
@@ -204,6 +232,7 @@ const App = () => {
           <TextField
             error={errors?.visitDate ? true : false}
             helperText={errors?.visitDate ? errors?.visitDate?.message : null}
+            size="small"
             type="date"
             id="outlined-basic"
             // label="Visit Date"
@@ -222,6 +251,7 @@ const App = () => {
           <TextField
             error={errors?.nextVisit ? true : false}
             helperText={errors?.nextVisit ? errors?.nextVisit?.message : null}
+            size="small"
             type="date"
             id="outlined-basic"
             // label="Next Visit"
@@ -238,7 +268,7 @@ const App = () => {
         </Stack>
 
         {/* divider */}
-        <div style={{ height: "5px", backgroundColor: "gray" }} />
+        <div style={{ height: "2px", backgroundColor: "gray" }} />
 
         {/* for physician details */}
         <Stack
@@ -254,6 +284,7 @@ const App = () => {
             helperText={
               errors?.physicianID ? errors?.physicianID?.message : null
             }
+            size="small"
             id="outlined-basic"
             label="Physician ID"
             variant="outlined"
@@ -272,6 +303,7 @@ const App = () => {
             helperText={
               errors?.physicianName ? errors?.physicianName?.message : null
             }
+            size="small"
             id="outlined-basic"
             label="Physician Name (First and Last)"
             variant="outlined"
@@ -294,6 +326,7 @@ const App = () => {
             helperText={
               errors?.physicianPhone ? errors?.physicianPhone?.message : null
             }
+            size="small"
             type="number"
             id="outlined-basic"
             label="Physician Phone Number"
@@ -315,6 +348,7 @@ const App = () => {
           <TextField
             error={errors?.bill ? true : false}
             helperText={errors?.bill ? errors?.bill?.message : null}
+            size="small"
             id="outlined-basic"
             label="Bill"
             variant="outlined"
@@ -329,7 +363,7 @@ const App = () => {
         </Stack>
 
         {/* divider */}
-        <div style={{ height: "5px", backgroundColor: "gray" }} />
+        <div style={{ height: "2px", backgroundColor: "gray" }} />
 
         {/* submit button */}
         <Button
