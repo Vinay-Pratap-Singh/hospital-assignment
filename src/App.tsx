@@ -21,7 +21,9 @@ import { deletePatientRecord, getAllPatientRecord } from "./redux/hospital";
 const App = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { patients, isLoading } = useAppSelector((state) => state.hospital);
+  const { isLoading, patientsToBeDisplayed } = useAppSelector(
+    (state) => state.hospital
+  );
 
   // for getting patients record
   useEffect(() => {
@@ -89,56 +91,58 @@ const App = () => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {patients.length ? (
-                    patients.map((patient: IPatientData, index: number) => (
-                      <TableRow key={index}>
-                        <TableCell>{index + 1}</TableCell>
-                        <TableCell>{patient?.patientID}</TableCell>
-                        <TableCell>{patient?.patientName}</TableCell>
-                        <TableCell>{patient?.location}</TableCell>
-                        <TableCell>{patient?.age}</TableCell>
-                        <TableCell>{patient?.phone}</TableCell>
-                        <TableCell>{patient?.address}</TableCell>
-                        <TableCell>{patient?.prescription}</TableCell>
-                        <TableCell>{patient?.dose}</TableCell>
-                        <TableCell>{patient?.visitDate.toString()}</TableCell>
-                        <TableCell>{patient?.nextVisit.toString()}</TableCell>
-                        <TableCell>{patient?.physicianID}</TableCell>
-                        <TableCell>{patient?.physicianName}</TableCell>
-                        <TableCell>{patient?.physicianPhone}</TableCell>
-                        <TableCell>{patient?.bill} Rs</TableCell>
-                        <TableCell>
-                          <ButtonGroup dir="row">
-                            <Button
-                              size="small"
-                              variant="contained"
-                              color="secondary"
-                              onClick={() =>
-                                navigate("/form/update", { state: patient })
-                              }
-                            >
-                              Edit
-                            </Button>
-                            <Button
-                              size="small"
-                              variant="contained"
-                              color="error"
-                              onClick={() =>
-                                dispatch(
-                                  deletePatientRecord(patient?.patientID)
-                                )
-                              }
-                            >
-                              Delete
-                            </Button>
-                          </ButtonGroup>
-                        </TableCell>
-                      </TableRow>
-                    ))
+                  {patientsToBeDisplayed.length ? (
+                    patientsToBeDisplayed.map(
+                      (patient: IPatientData, index: number) => (
+                        <TableRow key={index}>
+                          <TableCell>{index + 1}</TableCell>
+                          <TableCell>{patient?.patientID}</TableCell>
+                          <TableCell>{patient?.patientName}</TableCell>
+                          <TableCell>{patient?.location}</TableCell>
+                          <TableCell>{patient?.age}</TableCell>
+                          <TableCell>{patient?.phone}</TableCell>
+                          <TableCell>{patient?.address}</TableCell>
+                          <TableCell>{patient?.prescription}</TableCell>
+                          <TableCell>{patient?.dose}</TableCell>
+                          <TableCell>{patient?.visitDate.toString()}</TableCell>
+                          <TableCell>{patient?.nextVisit.toString()}</TableCell>
+                          <TableCell>{patient?.physicianID}</TableCell>
+                          <TableCell>{patient?.physicianName}</TableCell>
+                          <TableCell>{patient?.physicianPhone}</TableCell>
+                          <TableCell>{patient?.bill} Rs</TableCell>
+                          <TableCell>
+                            <ButtonGroup dir="row">
+                              <Button
+                                size="small"
+                                variant="contained"
+                                color="secondary"
+                                onClick={() =>
+                                  navigate("/form/update", { state: patient })
+                                }
+                              >
+                                Edit
+                              </Button>
+                              <Button
+                                size="small"
+                                variant="contained"
+                                color="error"
+                                onClick={() =>
+                                  dispatch(
+                                    deletePatientRecord(patient?.patientID)
+                                  )
+                                }
+                              >
+                                Delete
+                              </Button>
+                            </ButtonGroup>
+                          </TableCell>
+                        </TableRow>
+                      )
+                    )
                   ) : (
                     <TableRow>
-                      <TableCell colSpan={16} sx={{ textAlign: "center" }}>
-                        No user found
+                      <TableCell colSpan={16} sx={{ textAlign: "left" }}>
+                        No user found :(
                       </TableCell>
                     </TableRow>
                   )}

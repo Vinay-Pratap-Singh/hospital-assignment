@@ -6,11 +6,13 @@ import toast from "react-hot-toast";
 interface Istate {
   isLoading: boolean;
   patients: IPatientData[];
+  patientsToBeDisplayed: IPatientData[];
 }
 
 const initialState: Istate = {
   isLoading: false,
   patients: JSON.parse(localStorage.getItem("patients") || "[]"),
+  patientsToBeDisplayed: JSON.parse(localStorage.getItem("patients") || "[]"),
 };
 
 // for getting all the patient record
@@ -54,6 +56,7 @@ export const updatePatientRecord = createAsyncThunk(
   }
 );
 
+// for deleting the patient record
 export const deletePatientRecord = createAsyncThunk(
   "/delete",
   async (patientID: string, { dispatch }) => {
@@ -70,10 +73,15 @@ export const deletePatientRecord = createAsyncThunk(
 const hospitalSlice = createSlice({
   name: "hospital",
   initialState,
-  reducers: {},
+  reducers: {
+    setRecord: (state, action) => {
+      console.log(action);
+      state.patientsToBeDisplayed = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder
-      //   for getting all patient record
+      // for getting all patient record
       .addCase(getAllPatientRecord.pending, (state) => {
         state.isLoading = true;
       })
@@ -88,7 +96,7 @@ const hospitalSlice = createSlice({
         state.isLoading = false;
       })
 
-      //   for adding new patient record
+      // for adding new patient record
       .addCase(addNewPatient.pending, (state) => {
         state.isLoading = true;
       })
@@ -98,7 +106,7 @@ const hospitalSlice = createSlice({
       })
       .addCase(addNewPatient.rejected, (state) => {
         state.isLoading = false;
-        toast.error("Try again! Failed to add patient data");
+        toast.error("Try again! Failed to add patient record");
       })
 
       // for updating patient record
@@ -111,7 +119,7 @@ const hospitalSlice = createSlice({
       })
       .addCase(updatePatientRecord.rejected, (state) => {
         state.isLoading = false;
-        toast.error("Try again! Failed to update patient data");
+        toast.error("Try again! Failed to update patient record");
       })
 
       // for deleting patient record
@@ -124,9 +132,10 @@ const hospitalSlice = createSlice({
       })
       .addCase(deletePatientRecord.rejected, (state) => {
         state.isLoading = false;
-        toast.error("Try again! Failed to delete patient data");
+        toast.error("Try again! Failed to delete patient record");
       });
   },
 });
 
+export const { setRecord } = hospitalSlice.actions;
 export default hospitalSlice.reducer;
