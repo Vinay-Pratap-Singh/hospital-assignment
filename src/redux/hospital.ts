@@ -10,7 +10,7 @@ interface Istate {
 
 const initialState: Istate = {
   isLoading: false,
-  patients: [],
+  patients: JSON.parse(localStorage.getItem("patients") || "[]"),
 };
 
 // for getting all the patient record
@@ -26,12 +26,30 @@ export const getAllPatientRecord = createAsyncThunk("/get/all", async () => {
 // for adding new patient record
 export const addNewPatient = createAsyncThunk(
   "/add",
-  async (data: IPatientData) => {
+  async (data: IPatientData, { dispatch }) => {
     try {
       const res = await axiosInstance.post("/", data);
+      dispatch(getAllPatientRecord());
       return res?.data;
     } catch (error) {
       toast.error("Failed to add patient record");
+    }
+  }
+);
+
+// for updating a patient record
+export const updatePatientRecord = createAsyncThunk(
+  "/update",
+  async (data: IPatientData, { dispatch }) => {
+    try {
+      const res = await axiosInstance.patch(
+        `/patientID/${data?.patientID}`,
+        data
+      );
+      dispatch(getAllPatientRecord());
+      return res?.data;
+    } catch (error) {
+      toast.error("Failed to update patient record");
     }
   }
 );
@@ -48,7 +66,10 @@ const hospitalSlice = createSlice({
       })
       .addCase(getAllPatientRecord.fulfilled, (state, action) => {
         state.isLoading = false;
-        console.log(action?.payload);
+        if (action?.payload) {
+          state.patients = action?.payload;
+          localStorage.setItem("patients", JSON.stringify(action?.payload));
+        }
       })
       .addCase(getAllPatientRecord.rejected, (state) => {
         state.isLoading = false;
@@ -65,6 +86,19 @@ const hospitalSlice = createSlice({
       .addCase(addNewPatient.rejected, (state) => {
         state.isLoading = false;
         toast.error("Try again! Failed to add patient data");
+      })
+
+      // for updating patient record
+      .addCase(updatePatientRecord.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(updatePatientRecord.fulfilled, (state) => {
+        state.isLoading = false;
+        toast.success("Patient record updated successfully");
+      })
+      .addCase(updatePatientRecord.rejected, (state) => {
+        state.isLoading = false;
+        toast.error("Try again! Failed to update patient data");
       });
   },
 });

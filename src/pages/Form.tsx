@@ -6,15 +6,17 @@ import {
   Typography,
 } from "@mui/material";
 import { useForm } from "react-hook-form";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { IPatientData } from "../helper/interface";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
-import { addNewPatient } from "../redux/hospital";
+import { addNewPatient, updatePatientRecord } from "../redux/hospital";
 import { useEffect } from "react";
+import { v4 as uuid } from "uuid";
+import toast from "react-hot-toast";
 
 const Form = () => {
   const { operation } = useParams();
-  console.log(operation);
+  const { state: patient } = useLocation();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { isLoading } = useAppSelector((state) => state.hospital);
@@ -23,13 +25,46 @@ const Form = () => {
     register,
     reset,
     formState: { errors },
-  } = useForm<IPatientData>();
+  } = useForm<IPatientData>({
+    defaultValues: patient && {
+      patientID: patient?.patientID,
+      patientName: patient?.patientName,
+      location: patient?.location,
+      age: patient?.age,
+      phone: patient?.phone,
+      address: patient?.address,
+      prescription: patient?.prescription,
+      dose: patient?.dose,
+      visitDate: patient?.visitDate,
+      nextVisit: patient?.nextVisit,
+      physicianID: patient?.physicianID,
+      physicianName: patient?.physicianName,
+      physicianPhone: patient?.physicianPhone,
+      bill: patient?.bill,
+    },
+  });
 
   // add patient record
   const onSubmit = async (data: IPatientData) => {
-    const res = await dispatch(addNewPatient(data));
-    if (res?.payload) {
-      reset();
+    //   for adding new record
+    if (operation === "add") {
+      const updatedData = { ...data };
+      updatedData.patientID = uuid();
+      if (!updatedData?.patientID) {
+        toast.error("Failed to generate patient id");
+        return;
+      }
+      const res = await dispatch(addNewPatient(updatedData));
+      if (res?.payload) {
+        reset();
+      }
+    }
+    //   for updating an existing record
+    else {
+      const res = await dispatch(updatePatientRecord(data));
+      if (res?.payload) {
+        navigate("/");
+      }
     }
   };
 
@@ -358,9 +393,11 @@ const Form = () => {
         {/* divider */}
         <div style={{ height: "2px", backgroundColor: "gray" }} />
 
+        {/* for back and submit button */}
         <ButtonGroup sx={{ width: "fit-content", margin: "auto" }}>
           {/* back to homepage */}
           <Button
+            disabled={isLoading}
             type="button"
             variant="contained"
             style={{
