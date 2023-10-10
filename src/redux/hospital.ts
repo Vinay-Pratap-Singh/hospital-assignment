@@ -54,6 +54,19 @@ export const updatePatientRecord = createAsyncThunk(
   }
 );
 
+export const deletePatientRecord = createAsyncThunk(
+  "/delete",
+  async (patientID: string, { dispatch }) => {
+    try {
+      const res = await axiosInstance.delete(`/patientID/${patientID}`);
+      dispatch(getAllPatientRecord());
+      return res?.data;
+    } catch (error) {
+      toast.error("Failed to delete patient record");
+    }
+  }
+);
+
 const hospitalSlice = createSlice({
   name: "hospital",
   initialState,
@@ -99,6 +112,19 @@ const hospitalSlice = createSlice({
       .addCase(updatePatientRecord.rejected, (state) => {
         state.isLoading = false;
         toast.error("Try again! Failed to update patient data");
+      })
+
+      // for deleting patient record
+      .addCase(deletePatientRecord.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(deletePatientRecord.fulfilled, (state) => {
+        state.isLoading = false;
+        toast.success("Patient record deleted successfully");
+      })
+      .addCase(deletePatientRecord.rejected, (state) => {
+        state.isLoading = false;
+        toast.error("Try again! Failed to delete patient data");
       });
   },
 });

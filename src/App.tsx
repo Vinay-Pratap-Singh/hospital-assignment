@@ -16,7 +16,7 @@ import { useAppDispatch, useAppSelector } from "./hooks/redux";
 import { IPatientData } from "./helper/interface";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
-import { getAllPatientRecord } from "./redux/hospital";
+import { deletePatientRecord, getAllPatientRecord } from "./redux/hospital";
 
 const App = () => {
   const navigate = useNavigate();
@@ -111,13 +111,26 @@ const App = () => {
                           <ButtonGroup dir="row">
                             <Button
                               size="small"
+                              variant="contained"
+                              color="secondary"
                               onClick={() =>
                                 navigate("/form/update", { state: patient })
                               }
                             >
                               Edit
                             </Button>
-                            <Button size="small">Delete</Button>
+                            <Button
+                              size="small"
+                              variant="contained"
+                              color="error"
+                              onClick={() =>
+                                dispatch(
+                                  deletePatientRecord(patient?.patientID)
+                                )
+                              }
+                            >
+                              Delete
+                            </Button>
                           </ButtonGroup>
                         </TableCell>
                       </TableRow>
