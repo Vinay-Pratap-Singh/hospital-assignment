@@ -75,7 +75,6 @@ const hospitalSlice = createSlice({
   initialState,
   reducers: {
     setRecord: (state, action) => {
-      console.log(action);
       state.patientsToBeDisplayed = action.payload;
     },
   },

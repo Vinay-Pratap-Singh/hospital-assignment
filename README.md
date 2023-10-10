@@ -1,8 +1,30 @@
-# React + Vite
+# Hospital Assignment
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Table of content
 
-Currently, two official plugins are available:
+- [Introduction](#introduction)
+- [Technologies Used](#technologies-used)
+- [Features](#features)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Introduction
+
+This is an assignment in which I am using the google sheet as a database for performing the CRUD operation over the patient record.
+
+## Technologies Used
+
+- React JS - Javascript library
+- Typescript JS - For type safety
+- Material UI - React UI Component
+- Redux toolkit - For state management
+- Sheetdb - For using google sheet as database
+- React Hook Form - Form management
+- React Hot Toast - For toast notification
+- React Router DOM - For routing
+- Axios - For performing API calls
+
+## Features
+
+- Homepage to display all the patient record in a tabular format.
+- Form page for creating and updating any new patient record.
+- Delete option for removing the record from google sheet.
+- One can search for any record based on patient name or physician name.
