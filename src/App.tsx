@@ -1,19 +1,20 @@
 import { Button, ButtonGroup, Stack, TextField } from "@mui/material";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { IPatientData } from "./helper/interface";
 
 const App = () => {
   const {
     handleSubmit,
     register,
     formState: { errors, isSubmitting },
-  } = useForm();
+  } = useForm<IPatientData>();
 
   // button to handle active state
   const [activeBtn, setActiveBtn] = useState(0);
 
   // to handle form submit
-  const onSubmit = (data) => console.log(data);
+  const onSubmit = (data: IPatientData) => console.log(data);
 
   return (
     <Stack direction={"row"} gap={5} p={2}>
@@ -348,6 +349,7 @@ const App = () => {
           <TextField
             error={errors?.bill ? true : false}
             helperText={errors?.bill ? errors?.bill?.message : null}
+            type="number"
             size="small"
             id="outlined-basic"
             label="Bill"
