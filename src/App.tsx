@@ -2,19 +2,36 @@ import { Button, ButtonGroup, Stack, TextField } from "@mui/material";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { IPatientData } from "./helper/interface";
+import axiosInstance from "./helper/AxiosInstance";
+import toast from "react-hot-toast";
 
 const App = () => {
+  // for handling the submit button
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const {
     handleSubmit,
     register,
-    formState: { errors, isSubmitting },
+    reset,
+    formState: { errors },
   } = useForm<IPatientData>();
 
   // button to handle active state
   const [activeBtn, setActiveBtn] = useState(0);
 
-  // to handle form submit
-  const onSubmit = (data: IPatientData) => console.log(data);
+  // add patient record
+  const onSubmit = async (data: IPatientData) => {
+    setIsSubmitting(true);
+    try {
+      const res = await axiosInstance.post("/", data);
+      if (res?.data) {
+        toast.success("Patient record added successfully");
+        reset();
+      }
+    } catch (error) {
+      toast.error("Failed to add patient record");
+    }
+    setIsSubmitting(false);
+  };
 
   return (
     <Stack direction={"row"} gap={5} p={2}>
