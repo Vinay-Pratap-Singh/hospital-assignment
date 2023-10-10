@@ -13,6 +13,7 @@ import { addNewPatient, updatePatientRecord } from "../redux/hospital";
 import { useEffect } from "react";
 import { v4 as uuid } from "uuid";
 import toast from "react-hot-toast";
+import "./Form.css";
 
 const Form = () => {
   const { operation } = useParams();
@@ -258,7 +259,7 @@ const Form = () => {
               size="small"
               type="date"
               id="outlined-basic"
-              // label="Visit Date"
+              label="Visit Date"
               variant="outlined"
               defaultValue={""}
               {...register("visitDate", {
@@ -277,7 +278,7 @@ const Form = () => {
               size="small"
               type="date"
               id="outlined-basic"
-              // label="Next Visit"
+              label="Next Visit"
               variant="outlined"
               placeholder=""
               {...register("nextVisit", {

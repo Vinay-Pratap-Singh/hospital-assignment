@@ -88,6 +88,7 @@ const hospitalSlice = createSlice({
         state.isLoading = false;
         if (action?.payload) {
           state.patients = action?.payload;
+          state.patientsToBeDisplayed = action?.payload;
           localStorage.setItem("patients", JSON.stringify(action?.payload));
         }
       })
